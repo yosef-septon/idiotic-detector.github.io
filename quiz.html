@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Idiotic Detector – Assessment</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #020617;
+      color: #e5e7eb;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .wrapper {
+      max-width: 800px;
+      width: 95%;
+      margin: 20px auto;
+    }
+    .card {
+      background: #020617;
+      border-radius: 16px;
+      padding: 20px 22px 18px;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.7);
+      border: 1px solid #1f2937;
+      position: relative;
+      overflow: hidden;
+    }
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 12px;
+      color: #9ca3af;
+      margin-bottom: 10px;
+    }
+    .header-row span strong {
+      color: #e5e7eb;
+    }
+    .progress {
+      font-size: 12px;
+      margin-bottom: 10px;
+      color: #9ca3af;
+    }
+    h2 {
+      margin: 8px 0 12px;
+      font-size: 18px;
+    }
+    .answers {
+      margin-top: 6px;
+    }
+    .answer-option {
+      margin: 4px 0;
+      padding: 6px 8px;
+      border-radius: 8px;
+      background: rgba(15, 23, 42, 0.9);
+      cursor: pointer;
+      border: 1px solid transparent;
+      font-size: 14px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .answer-option input[type="radio"] {
+      accent-color: #f97316;
+    }
+    .answer-option:hover {
+      border-color: #4b5563;
+      background: rgba(30, 64, 175, 0.35);
+    }
+    .input-answer {
+      width: 100%;
+      padding: 8px 9px;
+      border-radius: 8px;
+      border: 1px solid #374151;
+      background: #020617;
+      color: #e5e7eb;
+      font-size: 14px;
+      margin-top: 4px;
+      box-sizing: border-box;
+    }
+    .buttons-row {
+      margin-top: 16px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+    button {
+      border-radius: 999px;
+      border: none;
+      padding: 8px 16px;
+      font-size: 14px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .btn-next {
+      background: linear-gradient(to right, #f97316, #ef4444);
+      color: white;
+    }
+    .btn-next:hover {
+      filter: brightness(1.05);
+    }
+    .result-card {
+      background: rgba(15, 23, 42, 0.96);
+      border-radius: 16px;
+      padding: 22px 24px 20px;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.7);
+      border: 1px solid #1f2937;
+      max-width: 700px;
+      width: 95%;
+      margin: 20px auto;
+    }
+    .result-card h1 {
+      margin-top: 0;
+      font-size: 20px;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 20px;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+    .meta-row span strong {
+      color: #e5e7eb;
+    }
+    .score-line {
+      margin-top: 10px;
+      font-size: 15px;
+    }
+    .score-line strong {
+      color: #fbbf24;
+    }
+    .idiot-level {
+      margin-top: 4px;
+      font-size: 17px;
+      font-weight: 700;
+    }
+    .idiot-low { color: #22c55e; }
+    .idiot-mid { color: #eab308; }
+    .idiot-high { color: #f97316; }
+    .idiot-max { color: #ef4444; }
+    .report-text {
+      margin-top: 10px;
+      font-size: 14px;
+      line-height: 1.4;
+      color: #d1d5db;
+    }
+    .signatures {
+      margin-top: 22px;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      font-size: 12px;
+    }
+    .sig-block {
+      flex: 1;
+      text-align: center;
+    }
+    .sig-line {
+      border-bottom: 1px solid #4b5563;
+      height: 28px;
+      margin-bottom: 3px;
+      position: relative;
+    }
+    .sig-name-script {
+      position: absolute;
+      bottom: -2px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: "Brush Script MT", "Lucida Handwriting", cursive;
+      font-size: 18px;
+      color: #9ca3af;
+    }
+    .sig-label {
+      font-size: 11px;
+      color: #9ca3af;
+    }
+    .tiny-footer {
+      margin-top: 10px;
+      text-align: center;
+      font-size: 10px;
+      color: #9ca3af;
+    }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <!-- QUIZ CARD -->
+    <div id="quizCard" class="card">
+      <div class="header-row">
+        <span id="userMeta"></span>
+        <span id="dateMeta"></span>
+      </div>
+      <div class="progress" id="progressText"></div>
+      <h2 id="questionText"></h2>
+      <div class="answers" id="answersContainer"></div>
+      <div id="inputContainer"></div>
+      <div class="buttons-row">
+        <button class="btn-next" id="nextBtn">Next</button>
+      </div>
+    </div>
+
+    <!-- RESULT CARD -->
+    <div id="resultCard" class="result-card hidden">
+      <h1>Idiotic Competency Evaluation – Official Report</h1>
+      <div class="meta-row" id="resultMeta"></div>
+      <div class="score-line" id="scoreLine"></div>
+      <div class="idiot-level" id="idiotLevel"></div>
+      <div class="report-text" id="reportText"></div>
+
+      <div class="signatures">
+        <div class="sig-block">
+          <div class="sig-line">
+            <div class="sig-name-script">ChatGPT</div>
+          </div>
+          <div class="sig-label">ChatGPT</div>
+        </div>
+        <div class="sig-block">
+          <div class="sig-line">
+            <div class="sig-name-script">ys</div>
+          </div>
+          <div class="sig-label">Yosef</div>
+        </div>
+      </div>
+
+      <div class="tiny-footer">
+        made by Yosef Septon and ChatGPT
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Load user info from localStorage
+    const rawUser = localStorage.getItem("idiotUser");
+    if (!rawUser) {
+      // If someone opens quiz.html directly, send them to form
+      window.location.href = "index.html";
+    }
+    const user = JSON.parse(rawUser);
+
+    // Questions array
+    // type: "choice" or "input"
+    // bg: background color for that question
+    const questions = [
+      {
+        text: "What do you put in a toaster?",
+        type: "choice",
+        options: ["Toast", "Bread", "Fire", "Knives", "Pizza"],
+        correctIndex: 1,
+        bg: "#1f2933"
+      },
+      {
+        text: "What do cows drink?",
+        type: "choice",
+        options: ["Milk", "Juice", "Soda", "Water", "Chocolate milk"],
+        correctIndex: 3,
+        bg: "#064e3b"
+      },
+      {
+        text: "You are in a race. You pass the person in 2nd place. What place are you now in?",
+        type: "choice",
+        options: ["1st", "3rd", "2nd", "Last", "I quit"],
+        correctIndex: 2,
+        bg: "#312e81"
+      },
+      {
+        text: "How many months have at least 28 days?",
+        type: "choice",
+        options: ["1", "2", "6", "12", "Only in leap years"],
+        correctIndex: 3,
+        bg: "#4b5563"
+      },
+      {
+        text: "A plane crashes on the border of the US and Canada. Where do they bury the survivors?",
+        type: "choice",
+        options: ["USA", "Canada", "Both", "Ocean", "You don\\'t bury survivors"],
+        correctIndex: 4,
+        bg: "#374151"
+      },
+      {
+        text: "Which is heavier: 1 kg of feathers or 1 kg of steel?",
+        type: "choice",
+        options: ["Feathers", "Steel", "Zero in space", "They weigh the same", "A lot of feathers"],
+        correctIndex: 3,
+        bg: "#111827"
+      },
+      {
+        text: "You throw a red rock into the blue sea. What does it become?",
+        type: "choice",
+        options: ["Purple", "Blue", "Sinking", "Lost", "Wet"],
+        correctIndex: 4,
+        bg: "#0f172a"
+      },
+      {
+        text: "What do you do at a green traffic light?",
+        type: "choice",
+        options: ["Stop", "Stop a little then go", "Go", "Reverse", "Honk"],
+        correctIndex: 2,
+        bg: "#14532d"
+      },
+      {
+        text: "You enter a dark room with a candle, fireplace, and gas lamp. You only have one match. What do you light first?",
+        type: "choice",
+        options: ["Candle", "Fireplace", "Lamp", "The room", "The match"],
+        correctIndex: 4,
+        bg: "#7c2d12"
+      },
+      {
+        text: "There are 12 fish in a tank. Half of them drown. How many are left?",
+        type: "choice",
+        options: ["6", "3", "0", "12 – fish don\\'t drown", "Depends on the tank"],
+        correctIndex: 3,
+        bg: "#0e7490"
+      },
+      {
+        text: "How many months have exactly 28 days?",
+        type: "input",
+        expected: "1",
+        bg: "#6b21a8"
+      },
+      {
+        text: "How many sides does a hexagon have?",
+        type: "input",
+        expected: "6",
+        bg: "#312e81"
+      },
+      {
+        text: "What do you put in a blue box?",
+        type: "choice",
+        options: ["Fat", "Clothes", "Nothing", "Something blue", "Air"],
+        correctIndex: 3,
+        bg: "#1d4ed8"
+      },
+      {
+        text: "Which is the WORST password?",
+        type: "choice",
+        options: ["P@ssw0rd!", "Yosef1234!", "ilovepizza2025", "somethingLikeThis_88", "123456"],
+        correctIndex: 4,
+        bg: "#111827"
+      },
+      {
+        text: "A red house is made of red bricks, a blue house of blue bricks, a yellow house of yellow bricks. What is a greenhouse made of?",
+        type: "choice",
+        options: ["Green bricks", "Green wood", "Glass", "Plastic", "Leaves"],
+        correctIndex: 2,
+        bg: "#166534"
+      },
+      {
+        text: "2 + 2 × 2 = ?",
+        type: "choice",
+        options: ["8", "10", "2", "6", "Yes"],
+        correctIndex: 3,
+        bg: "#1f2933"
+      },
+      {
+        text: "A sign says \"DO NOT TOUCH.\" What is the smartest thing to do?",
+        type: "choice",
+        options: ["Touch it", "Touch it when nobody looks", "Touch it with one finger", "Lick it", "Don\\'t touch it"],
+        correctIndex: 4,
+        bg: "#7f1d1d"
+      },
+      {
+        text: "Which of these is a web browser?",
+        type: "choice",
+        options: ["Instagram", "WhatsApp", "TikTok", "Chrome", "Messages"],
+        correctIndex: 3,
+        bg: "#020617"
+      },
+      {
+        text: "You are facing north. You turn right. Which way are you facing?",
+        type: "choice",
+        options: ["North", "West", "East", "South", "Around"],
+        correctIndex: 2,
+        bg: "#047857"
+      },
+      {
+        text: "Click the word that is spelled correctly:",
+        type: "choice",
+        options: ["Recieve", "Recive", "Reciieve", "Receive", "Reseve"],
+        correctIndex: 3,
+        bg: "#374151"
+      },
+      {
+        text: "What do you breathe in to stay alive?",
+        type: "choice",
+        options: ["Fire", "Water", "Oxygen / air", "Juice", "Screaming"],
+        correctIndex: 2,
+        bg: "#1e293b"
+      },
+      {
+        text: "If you are 12 years old, how many birthdays have you had?",
+        type: "input",
+        expected: "12",
+        bg: "#334155"
+      },
+      {
+        text: "A website says \"FREE UNLIMITED ROBUX – JUST LOGIN!!\" What should you do?",
+        type: "choice",
+        options: ["Login with your real password", "Login with your friend\\'s account", "Share it with all your friends", "Bookmark it", "Close the page immediately"],
+        correctIndex: 4,
+        bg: "#0f172a"
+      },
+      {
+        text: "Two mothers and two daughters go out to eat. They order exactly 3 meals. How is that possible?",
+        type: "choice",
+        options: ["One didn\\'t eat", "They shared", "It was grandmother, mother, and daughter", "They left", "Math is fake"],
+        correctIndex: 2,
+        bg: "#4b5563"
+      }
+    ];
+
+    let current = 0;
+    let wrongCount = 0;
+
+    const bodyEl = document.body;
+    const quizCard = document.getElementById("quizCard");
+    const resultCard = document.getElementById("resultCard");
+    const userMeta = document.getElementById("userMeta");
+    const dateMeta = document.getElementById("dateMeta");
+    const progressText = document.getElementById("progressText");
+    const questionText = document.getElementById("questionText");
+    const answersContainer = document.getElementById("answersContainer");
+    const inputContainer = document.getElementById("inputContainer");
+    const nextBtn = document.getElementById("nextBtn");
+
+    // Set header info
+    userMeta.innerHTML = `Name: <strong>${user.fullName}</strong> &nbsp;|&nbsp; Age: <strong>${user.age}</strong> &nbsp;|&nbsp; Country: <strong>${user.country}</strong>`;
+    dateMeta.textContent = user.date || "";
+
+    function renderQuestion() {
+      const q = questions[current];
+      // background color per question
+      bodyEl.style.background = q.bg;
+
+      progressText.textContent = `Question ${current + 1} of ${questions.length}`;
+      questionText.textContent = q.text;
+      answersContainer.innerHTML = "";
+      inputContainer.innerHTML = "";
+
+      if (q.type === "choice") {
+        q.options.forEach((opt, idx) => {
+          const label = document.createElement("label");
+          label.className = "answer-option";
+
+          const radio = document.createElement("input");
+          radio.type = "radio";
+          radio.name = "answer";
+          radio.value = idx;
+
+          const span = document.createElement("span");
+          span.textContent = opt;
+
+          // fun blink for Q1: first option toggles Toast/Bread
+          if (current === 0 && idx === 0) {
+            let toggle = false;
+            span.textContent = "Toast";
+            setInterval(() => {
+              toggle = !toggle;
+              span.textContent = toggle ? "Bread" : "Toast";
+            }, 900);
+          }
+
+          label.appendChild(radio);
+          label.appendChild(span);
+          answersContainer.appendChild(label);
+        });
+      } else if (q.type === "input") {
+        const input = document.createElement("input");
+        input.type = "text";
+        input.className = "input-answer";
+        input.id = "textAnswer";
+        input.placeholder = "Type your answer here";
+        inputContainer.appendChild(input);
+      }
+
+      nextBtn.textContent = current === questions.length - 1 ? "See my result" : "Next";
+    }
+
+    function handleNext() {
+      const q = questions[current];
+      let correct = false;
+
+      if (q.type === "choice") {
+        const chosen = document.querySelector("input[name='answer']:checked");
+        if (!chosen) {
+          alert("Please select an answer.");
+          return;
+        }
+        const idx = parseInt(chosen.value, 10);
+        if (idx === q.correctIndex) {
+          correct = true;
+        }
+      } else if (q.type === "input") {
+        const input = document.getElementById("textAnswer");
+        const val = (input.value || "").trim().toLowerCase();
+        if (!val) {
+          alert("Please type an answer.");
+          return;
+        }
+        const expected = (q.expected || "").trim().toLowerCase();
+        if (val === expected) {
+          correct = true;
+        }
+      }
+
+      if (!correct) {
+        wrongCount++;
+      }
+
+      current++;
+      if (current < questions.length) {
+        renderQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    nextBtn.addEventListener("click", handleNext);
+
+    function showResult() {
+      quizCard.classList.add("hidden");
+      resultCard.classList.remove("hidden");
+
+      const total = questions.length;
+      const correctCount = total - wrongCount;
+      let idiotPercent = wrongCount * 4;
+      if (idiotPercent > 100) idiotPercent = 100;
+
+      const resultMeta = document.getElementById("resultMeta");
+      const scoreLine = document.getElementById("scoreLine");
+      const idiotLevelEl = document.getElementById("idiotLevel");
+      const reportText = document.getElementById("reportText");
+
+      resultMeta.innerHTML = `
+        <span><strong>Name:</strong> ${user.fullName}</span>
+        <span><strong>Age:</strong> ${user.age}</span>
+        <span><strong>Country:</strong> ${user.country}</span>
+        <span><strong>Username:</strong> ${user.username}</span>
+        <span><strong>Date:</strong> ${user.date}</span>
+      `;
+
+      scoreLine.innerHTML = `Score: <strong>${correctCount}/${total}</strong> correct &nbsp;&nbsp;|&nbsp;&nbsp; Idiotic level: <strong>${idiotPercent}%</strong>`;
+
+      let levelClass = "idiot-low";
+      let levelText = "";
+      let message = "";
+
+      if (idiotPercent === 0) {
+        levelClass = "idiot-low";
+        levelText = "0% Idiot – Suspiciously Smart";
+        message = `${user.fullName}, according to this extremely serious and highly scientific dumb test, you show no signs of idiocy. This is suspicious. Please retake the test while half asleep.`;
+      } else if (idiotPercent <= 24) {
+        levelClass = "idiot-low";
+        levelText = "Low Idiot Level";
+        message = `${user.fullName}, you make mistakes, but your brain is mostly online. Occasional glitches detected, especially around toasters and traffic lights.`;
+      } else if (idiotPercent <= 52) {
+        levelClass = "idiot-mid";
+        levelText = "Medium Idiot";
+        message = `${user.fullName}, your results show a comfortable, classic level of idiocy. You are not the dumbest person in the room, but you should not be left alone with \"FREE ROBUX\" websites.`;
+      } else if (idiotPercent <= 80) {
+        levelClass = "idiot-high";
+        levelText = "High Idiot Level";
+        message = `${user.fullName}, this report confirms advanced idiotic tendencies. Your brain works, but it sometimes forgets to show up. Please avoid making important life decisions without adult supervision.`;
+      } else {
+        levelClass = "idiot-max";
+        levelText = "MAXIMUM IDIOT – Certified";
+        message = `${user.fullName}, this official evaluation declares you a 100% MAXIMUM IDIOT. You are now legally banned from touching mysterious buttons, toaster settings, and anything that says \"Click here for free\". Congratulations.`;
+      }
+
+      idiotLevelEl.className = "idiot-level " + levelClass;
+      idiotLevelEl.textContent = levelText;
+      reportText.textContent = message;
+    }
+
+    // Start with first question
+    renderQuestion();
+  </script>
+</body>
+</html>
