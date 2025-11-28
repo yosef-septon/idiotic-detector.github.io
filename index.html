@@ -152,26 +152,15 @@
   </div>
 
   <script>
-    // Set today's date
+    // Show today's date (for fun, doesn’t affect the button)
     const dateEl = document.getElementById("dateDisplay");
     const today = new Date();
-    const y = today.getFullYear();
-    const m = String(today.getMonth() + 1).padStart(2, "0");
-    const d = String(today.getDate()).padStart(2, "0");
-    dateEl.textContent = `${y}-${m}-${d} (auto)`;
+    dateEl.textContent = today.toISOString().split("T")[0] + " (auto)";
 
-    // Save info and go to quiz
+    // SUPER SIMPLE: just go to quiz.html when form is submitted
     document.getElementById("introForm").addEventListener("submit", function (e) {
-      e.preventDefault();
-      const data = {
-        fullName: document.getElementById("fullName").value.trim(),
-        age: document.getElementById("age").value.trim(),
-        country: document.getElementById("country").value.trim(),
-        username: document.getElementById("username").value.trim(),
-        date: dateEl.textContent
-      };
-      localStorage.setItem("idiotUser", JSON.stringify(data));
-      window.location.href = "quiz.html";
+      e.preventDefault();           // stop normal form submit
+      window.location.href = "quiz.html";  // go to the quiz page
     });
   </script>
 </body>
