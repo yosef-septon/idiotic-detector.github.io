@@ -1,208 +1,178 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Idiotic Detector</title>
+  <meta charset="UTF-8" />
+  <title>Idiotic Detector – Official Form</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #111;
-      color: #f5f5f5;
       margin: 0;
-      padding: 20px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1d4ed8, #020617);
+      color: #e5e7eb;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      background: #1e1e1e;
-      padding: 20px 25px 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 15px #000;
+    .card {
+      background: rgba(15, 23, 42, 0.96);
+      border-radius: 16px;
+      padding: 24px 28px 18px;
+      max-width: 480px;
+      width: 90%;
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.7);
+      border: 1px solid #1f2937;
     }
-    h1 {
+    .card-header {
+      border-bottom: 1px solid #1f2937;
+      padding-bottom: 10px;
+      margin-bottom: 16px;
+    }
+    .card-header h1 {
+      font-size: 20px;
+      margin: 0;
       text-align: center;
-      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
-    h2 {
+    .card-header p {
+      margin: 4px 0 0;
+      font-size: 11px;
       text-align: center;
-      font-weight: normal;
-      font-size: 16px;
-      margin-top: 0;
-      color: #aaa;
-    }
-    .question {
-      margin: 18px 0;
-      padding: 12px;
-      border-radius: 8px;
-      background: #2a2a2a;
-    }
-    .question p {
-      margin: 0 0 8px;
+      color: #9ca3af;
     }
     label {
       display: block;
-      margin: 4px 0;
-      cursor: pointer;
+      font-size: 13px;
+      margin-top: 10px;
+      margin-bottom: 3px;
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="email"] {
+      width: 100%;
+      padding: 7px 9px;
+      border-radius: 6px;
+      border: 1px solid #374151;
+      background: #020617;
+      color: #e5e7eb;
+      font-size: 13px;
+      box-sizing: border-box;
+    }
+    input::placeholder {
+      color: #6b7280;
+    }
+    .row {
+      display: flex;
+      gap: 8px;
+    }
+    .row > div {
+      flex: 1;
+    }
+    .small {
+      font-size: 11px;
+      color: #9ca3af;
+      margin-top: 2px;
+    }
+    .checkbox-row {
+      margin-top: 10px;
+      font-size: 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      color: #e5e7eb;
+    }
+    .checkbox-row input {
+      margin-top: 2px;
     }
     button {
-      display: block;
-      margin: 25px auto 10px;
-      padding: 12px 24px;
-      font-size: 18px;
+      margin-top: 16px;
+      width: 100%;
+      padding: 9px 0;
       border-radius: 999px;
       border: none;
+      font-size: 15px;
+      font-weight: 600;
       cursor: pointer;
-      background: #ff4757;
+      background: linear-gradient(to right, #ef4444, #f97316);
       color: white;
+      box-shadow: 0 8px 20px rgba(248, 113, 113, 0.4);
     }
     button:hover {
-      background: #ff6b81;
+      filter: brightness(1.05);
     }
-    #result {
-      margin-top: 20px;
+    .footer {
+      margin-top: 10px;
       text-align: center;
-      font-size: 20px;
-    }
-    #result span {
-      font-weight: bold;
+      font-size: 10px;
+      color: #9ca3af;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Idiotic Detector</h1>
-    <h2>Answer honestly. At the end you'll see how big of an idiot you are 😈</h2>
+  <div class="card">
+    <div class="card-header">
+      <h1>Idiotic Competency Evaluation – Form ICE-25</h1>
+      <p>Official Pre-Test Registration</p>
+    </div>
 
-    <form id="quiz">
+    <form id="introForm">
+      <label for="fullName">Full name</label>
+      <input id="fullName" type="text" required placeholder="Your full name" />
 
-      <!-- Q1 -->
-      <div class="question">
-        <p>1. What color is the sky on a clear day?</p>
-        <label><input type="radio" name="q1"> Green with purple polka dots</label>
-        <label><input type="radio" name="q1" class="correct"> Blue</label>
-        <label><input type="radio" name="q1"> Depends how my Wi-Fi feels</label>
+      <div class="row">
+        <div>
+          <label for="age">Age</label>
+          <input id="age" type="number" min="1" max="150" required placeholder="Age" />
+        </div>
+        <div>
+          <label for="country">Country</label>
+          <input id="country" type="text" required placeholder="Country" />
+        </div>
       </div>
 
-      <!-- Q2 -->
-      <div class="question">
-        <p>2. How many minutes are in one hour?</p>
-        <label><input type="radio" name="q2"> 42</label>
-        <label><input type="radio" name="q2" class="correct"> 60</label>
-        <label><input type="radio" name="q2"> However many I say there are</label>
+      <label for="username">User ID / Username</label>
+      <input id="username" type="text" required placeholder="Any name you want" />
+
+      <label>Date</label>
+      <div class="small" id="dateDisplay"></div>
+
+      <div class="checkbox-row">
+        <input id="agree" type="checkbox" required />
+        <label for="agree">
+          I understand this is a stupid joke test and not real science.
+        </label>
       </div>
 
-      <!-- Q3 -->
-      <div class="question">
-        <p>3. Which is heavier?</p>
-        <label><input type="radio" name="q3"> 1 pound of bricks</label>
-        <label><input type="radio" name="q3"> 1 pound of feathers</label>
-        <label><input type="radio" name="q3" class="correct"> They weigh the same</label>
-      </div>
-
-      <!-- Q4 -->
-      <div class="question">
-        <p>4. How many sides does a triangle have?</p>
-        <label><input type="radio" name="q4"> 4</label>
-        <label><input type="radio" name="q4" class="correct"> 3</label>
-        <label><input type="radio" name="q4"> 17 on Thursdays only</label>
-      </div>
-
-      <!-- Q5 -->
-      <div class="question">
-        <p>5. Spell “dog” backwards.</p>
-        <label><input type="radio" name="q5" class="correct"> god</label>
-        <label><input type="radio" name="q5"> gdo</label>
-        <label><input type="radio" name="q5"> d o g but upside down</label>
-      </div>
-
-      <!-- Q6 -->
-      <div class="question">
-        <p>6. What do plants need to grow?</p>
-        <label><input type="radio" name="q6" class="correct"> Water, light, and nutrients</label>
-        <label><input type="radio" name="q6"> TikTok likes</label>
-        <label><input type="radio" name="q6"> Minecraft RTX ON</label>
-      </div>
-
-      <!-- Q7 -->
-      <div class="question">
-        <p>7. Where does the sun rise?</p>
-        <label><input type="radio" name="q7"> West</label>
-        <label><input type="radio" name="q7" class="correct"> East</label>
-        <label><input type="radio" name="q7"> In my fridge</label>
-      </div>
-
-      <!-- Q8 -->
-      <div class="question">
-        <p>8. 2 + 2 × 2 = ?</p>
-        <label><input type="radio" name="q8"> 8</label>
-        <label><input type="radio" name="q8" class="correct"> 6</label>
-        <label><input type="radio" name="q8"> Potato</label>
-      </div>
-
-      <!-- Q9 -->
-      <div class="question">
-        <p>9. What do you breathe in to stay alive?</p>
-        <label><input type="radio" name="q9"> Fire</label>
-        <label><input type="radio" name="q9" class="correct"> Oxygen / air</label>
-        <label><input type="radio" name="q9"> Screaming</label>
-      </div>
-
-      <!-- Q10 -->
-      <div class="question">
-        <p>10. If a website says “Click here to close this tab”, what should you do?</p>
-        <label><input type="radio" name="q10"> Click random ads</label>
-        <label><input type="radio" name="q10" class="correct"> Probably don’t trust it</label>
-        <label><input type="radio" name="q10"> Give it your credit card</label>
-      </div>
-
-      <!-- You can add more questions later by copying a block like above -->
-
-      <button type="submit">See how big of an idiot you are</button>
+      <button type="submit">Begin Assessment</button>
     </form>
 
-    <div id="result"></div>
+    <div class="footer">
+      made by Yosef Septon and ChatGPT
+    </div>
   </div>
 
   <script>
-    const form = document.getElementById('quiz');
-    const resultDiv = document.getElementById('result');
+    // Set today's date
+    const dateEl = document.getElementById("dateDisplay");
+    const today = new Date();
+    const y = today.getFullYear();
+    const m = String(today.getMonth() + 1).padStart(2, "0");
+    const d = String(today.getDate()).padStart(2, "0");
+    dateEl.textContent = `${y}-${m}-${d} (auto)`;
 
-    form.addEventListener('submit', function (e) {
+    // Save info and go to quiz
+    document.getElementById("introForm").addEventListener("submit", function (e) {
       e.preventDefault();
-
-      const correctAnswers = document.querySelectorAll('input.correct');
-      let score = 0;
-      correctAnswers.forEach(input => {
-        if (input.checked) score++;
-      });
-
-      const totalQuestions = correctAnswers.length;
-      const wrong = totalQuestions - score;
-      let level = '';
-      let msg = '';
-
-      if (wrong === 0) {
-        level = '0% idiot';
-        msg = 'You are actually a genius. Suspicious. 🤨';
-      } else if (wrong <= 3) {
-        level = 'Low idiot level';
-        msg = 'You make mistakes, but you still have brain cells.';
-      } else if (wrong <= 6) {
-        level = 'Medium idiot';
-        msg = 'You might need to touch some grass and maybe a book.';
-      } else if (wrong <= 9) {
-        level = 'High idiot';
-        msg = 'Yeahhh… this is not your brightest moment 😅';
-      } else {
-        level = 'MAXIMUM IDIOT';
-        msg = 'Certified clown. Please do not operate heavy machinery. 🤡';
-      }
-
-      resultDiv.innerHTML = `
-        <p>Your score: <span>${score}/${totalQuestions}</span></p>
-        <p>Your idiot level: <span>${level}</span></p>
-        <p>${msg}</p>
-      `;
+      const data = {
+        fullName: document.getElementById("fullName").value.trim(),
+        age: document.getElementById("age").value.trim(),
+        country: document.getElementElementById("country").value.trim(),
+        username: document.getElementById("username").value.trim(),
+        date: dateEl.textContent
+      };
+      localStorage.setItem("idiotUser", JSON.stringify(data));
+      window.location.href = "quiz.html";
     });
   </script>
 </body>
